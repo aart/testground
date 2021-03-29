@@ -1,6 +1,5 @@
 from google.cloud import bigquery
 from google.oauth2 import service_account
-import argparse
 import datetime
 import json
 import googleapiclient.discovery
@@ -78,8 +77,8 @@ def transfer(description, project_id, start_date, start_time, source_bucket, sin
 
 
 description = "groundtest"
-start_date = "2021-03-29"
-start_time= "00:00:00"
+start_date = datetime.date(2021, 3, 29)
+start_time = datetime.time(hour=20)
 sink_bucket = "azure-proxy"
 
 transfer(description, project_id, start_date, start_time, bucket_name, sink_bucket)
