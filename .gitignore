@@ -6,7 +6,6 @@ __pycache__/
 # C extensions
 *.so
 
-testground-97-f335e9527b6a.json
 
 # Distribution / packaging
 .Python
