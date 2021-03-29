@@ -38,7 +38,7 @@ print(
 
 def transfer(description, project_id, start_date, start_time, source_bucket, sink_bucket):
     """Create a one-time transfer from Amazon S3 to Google Cloud Storage."""
-    storagetransfer = googleapiclient.discovery.build('storagetransfer', 'v1')
+    storagetransfer = googleapiclient.discovery.build('storagetransfer', 'v1',credentials=credentials)
 
     # Edit this template with desired parameters.
     transfer_job = {
@@ -77,10 +77,11 @@ def transfer(description, project_id, start_date, start_time, source_bucket, sin
         json.dumps(result, indent=4)))
 
 
-
 description = "groundtest"
 start_date = "2021-03-29"
 start_time= "00:00:00"
 sink_bucket = "azure-proxy"
 
 transfer(description, project_id, start_date, start_time, bucket_name, sink_bucket)
+
+
