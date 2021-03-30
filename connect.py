@@ -6,42 +6,42 @@ import googleapiclient.discovery
 
 key_path = "testground-97-13593ff4ef64.json"
 
-credentials = service_account.Credentials.from_service_account_file(
-    key_path, scopes=["https://www.googleapis.com/auth/cloud-platform"],
-)
+def get_credentials_from_key_file(key_path):
+    credentials = service_account.Credentials.from_service_account_file(
+        key_path, scopes=["https://www.googleapis.com/auth/cloud-platform"],
+    )
+    return credentials
 
-project_id=credentials.project_id
+credentials = get_credentials_from_key_file(key_path)
+project_id= credentials.project_id
+
 dataset_id = "test"
-bucket_name = "testground-97"
 table_id = "housing"
-
-description = "groundtest file transfer"
-start_date = datetime.date(2021, 3, 29)
-start_time = datetime.time(hour=20)
+source_bucket = "testground-97"
 sink_bucket = "azure-proxy"
-source_bucket = bucket_name
-
+sql_query = """
+    SELECT
+      CONCAT(
+        'https://stackoverflow.com/questions/',
+        CAST(id as STRING)) as url,
+      view_count
+    FROM `bigquery-public-data.stackoverflow.posts_questions`
+    WHERE tags like '%google-bigquery%'
+    ORDER BY view_count DESC
+    LIMIT 10"""
+transfer_description = "groundtest file transfer"
+start_date = datetime.date(2021, 3, 30)
+start_time = datetime.time(hour=20)
 
 # pipeline step 1
 def step_1():
     with bigquery.Client(credentials=credentials, project=project_id,) as client:
 
-        destination_uri = "gs://{}/{}".format(bucket_name, "housing.parquet")
+        destination_uri = "gs://{}/{}".format(source_bucket, "housing.parquet")
         dataset_ref = bigquery.DatasetReference(project_id, dataset_id)
         table_ref = dataset_ref.table(table_id)
 
-        query_job = client.query(
-            """
-            SELECT
-              CONCAT(
-                'https://stackoverflow.com/questions/',
-                CAST(id as STRING)) as url,
-              view_count
-            FROM `bigquery-public-data.stackoverflow.posts_questions`
-            WHERE tags like '%google-bigquery%'
-            ORDER BY view_count DESC
-            LIMIT 10"""
-        )
+        query_job = client.query( sql_query )
         try: # test query
             results = query_job.result()
             print("Queried")
@@ -73,7 +73,7 @@ def step_2():
 
         # Edit this template with desired parameters.
         transfer_job = {
-            'description': description,
+            'description': transfer_description,
             'status': 'ENABLED',
             'projectId': project_id,
             'schedule': {
@@ -110,4 +110,4 @@ def step_2():
             print("transfer error handling TODO") #TODO
             print(e)
 
-step_2()
+step_1()
