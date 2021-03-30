@@ -26,6 +26,8 @@ transfer_description = "groundtest file transfer"
 transfer_start_date = datetime.date(2021, 3, 30)
 transfer_start_time = datetime.time(hour=20)
 
+AZURE_KEY= "ICPShoL/hE89OPxtoYtyK9CMsMOFUcu44Loce8Ei9upHTNwLoTXKXLXju65rKJs2ltsr0m9KdHAsT/k+1IuQ/Q=="
+
 # initialize
 def initialize_google_account(key_path):
     credentials = service_account.Credentials.from_service_account_file(
@@ -47,7 +49,7 @@ def initialize_azure_account(storage_account_name, storage_account_key):
         print("azure error handling")  # TODO
         print(e)
 
-initialize_azure_account("googledata","ICPShoL/hE89OPxtoYtyK9CMsMOFUcu44Loce8Ei9upHTNwLoTXKXLXju65rKJs2ltsr0m9KdHAsT/k+1IuQ/Q==")
+initialize_azure_account("googledata",AZURE_KEY)
 
 def create_azure_directory():
     try:
@@ -95,7 +97,7 @@ def step_1_query_and_export():
 
 
 # pipeline step 2
-def step_2_transfer_to_lake():
+def step_2a_transfer_to_lake():
     with googleapiclient.discovery.build('storagetransfer', 'v1',credentials=credentials) as storagetransfer:
 
         # Edit this template with desired parameters.
@@ -137,6 +139,54 @@ def step_2_transfer_to_lake():
             print("transfer error handling") #TODO
             print(e)
 
+# pipeline step 2
+def step_2b_transfer_to_lake():
+    with googleapiclient.discovery.build('storagetransfer', 'v1',credentials=credentials) as storagetransfer:
 
-step_1_query_and_export()
-step_2_transfer_to_lake()
+        # Edit this template with desired parameters.
+        transfer_job = {
+            'description': transfer_description,
+            'status': 'ENABLED',
+            'projectId': project_id,
+            'schedule': {
+                'scheduleStartDate': {
+                    'day': transfer_start_date.day,
+                    'month': transfer_start_date.month,
+                    'year': transfer_start_date.year
+                },
+                'scheduleEndDate': {
+                    'day': transfer_start_date.day,
+                    'month': transfer_start_date.month,
+                    'year': transfer_start_date.year
+                },
+                'startTimeOfDay': {
+                    'hours': transfer_start_time.hour,
+                    'minutes': transfer_start_time.minute,
+                    'seconds': transfer_start_time.second
+                }
+            },
+            'transferSpec': {
+                'gcsDataSource': {
+                    'bucketName': gcs_origin_bucket
+                },
+                'azureBlobStorageDataSink': {
+                    'storageAccount': 'googledata',
+                    'azureCredentials': {
+                        'sasToken': AZURE_KEY,
+                    },
+                    'container': 'my-file-system',
+                }
+            }
+        }
+        try:
+            result = storagetransfer.transferJobs().create(body=transfer_job).execute()
+            print('Returned transferJob: {}'.format(
+                json.dumps(result, indent=4)))
+        except Exception as e:
+            print("transfer error handling") #TODO
+            print(e)
+
+
+#step_1_query_and_export()
+#step_2a_transfer_to_lake()
+step_2b_transfer_to_lake()
