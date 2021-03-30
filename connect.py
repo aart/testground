@@ -41,30 +41,29 @@ def step_1():
             query_job = client.query(sql_query)
             results = query_job.result()
             print("Queried")
+            try:  # test export
+                destination_uri = "gs://{}/{}".format(source_bucket, "housing.parquet")
+                dataset_ref = bigquery.DatasetReference(project_id, dataset_id)
+                table_ref = dataset_ref.table(table_id)
+                config = bigquery.job.ExtractJobConfig(destination_format="PARQUET")
+                extract_job = client.extract_table(
+                    table_ref,
+                    destination_uri,
+                    # Location must match that of the source table.
+                    job_config=config,
+                    location="EU",
+                )  # API request
+                extract_job.result()  # Waits for job to complete.
+                print(
+                    "Exported {}:{}.{} to {}".format(project_id, dataset_id, table_id, destination_uri)
+                )
+            except Exception as e:
+                print("export error handling TODO")  # TODO
+                print(e)
         except Exception as e:
             print("query error handling TODO") #TODO
             print(e)
 
-
-        try: # test export
-            destination_uri = "gs://{}/{}".format(source_bucket, "housing.parquet")
-            dataset_ref = bigquery.DatasetReference(project_id, dataset_id)
-            table_ref = dataset_ref.table(table_id)
-            config = bigquery.job.ExtractJobConfig(destination_format="PARQUET")
-            extract_job = client.extract_table(
-                table_ref,
-                destination_uri,
-                # Location must match that of the source table.
-                job_config=config,
-                location="EU",
-            )  # API request
-            extract_job.result()  # Waits for job to complete.
-            print(
-                "Exported {}:{}.{} to {}".format(project_id, dataset_id, table_id, destination_uri)
-            )
-        except Exception as e:
-            print("export error handling TODO") #TODO
-            print(e)
 
 # pipeline step 2
 def step_2():
