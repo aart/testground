@@ -47,7 +47,7 @@ def initialize_azure_account(storage_account_name, storage_account_key):
         print("azure error handling")  # TODO
         print(e)
 
-initialize_azure_account("googledata","")
+initialize_azure_account("googledata","TODO")
 
 
 # pipeline step 1
