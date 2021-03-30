@@ -67,7 +67,7 @@ def step_1_query_and_export():
 
 
 # pipeline step 2
-def step_2_transfer_file_to_lake():
+def step_2_transfer_to_lake():
     with googleapiclient.discovery.build('storagetransfer', 'v1',credentials=credentials) as storagetransfer:
 
         # Edit this template with desired parameters.
@@ -111,4 +111,4 @@ def step_2_transfer_file_to_lake():
 
 
 step_1_query_and_export()
-step_2_transfer_file_to_lake()
+step_2_transfer_to_lake()
