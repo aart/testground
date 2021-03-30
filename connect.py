@@ -5,7 +5,7 @@ import json
 import googleapiclient.discovery
 
 
-# configuration
+# test configuration
 key_path = "testground-97-13593ff4ef64.json"
 dataset_id = "test"
 table_id = "housing"
