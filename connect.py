@@ -16,6 +16,8 @@ bucket_name = "testground-97"
 table_id = "housing"
 
 
+# pipeline step 1
+
 with bigquery.Client(credentials=credentials, project=project_id,) as client:
 
     destination_uri = "gs://{}/{}".format(bucket_name, "housing.parquet")
@@ -34,23 +36,29 @@ with bigquery.Client(credentials=credentials, project=project_id,) as client:
         ORDER BY view_count DESC
         LIMIT 10"""
     )
+    try: # test query
+        results = query_job.result()
+    except Exception as e:
+        print(e)
 
-    results = query_job.result()
+    try: # test export
+        extract_job = client.extract_table(
+            table_ref,
+            destination_uri,
+            # Location must match that of the source table.
+            location="EU",
+        )  # API request
+        extract_job.result()  # Waits for job to complete.
+        print(
+            "Exported {}:{}.{} to {}".format(project_id, dataset_id, table_id, destination_uri)
+        )
+    except Exception as e:
+        print(e)
 
 
-    extract_job = client.extract_table(
-        table_ref,
-        destination_uri,
-        # Location must match that of the source table.
-        location="EU",
-    )  # API request
-    extract_job.result()  # Waits for job to complete.
+# pipeline step 2
 
-    print(
-        "Exported {}:{}.{} to {}".format(project_id, dataset_id, table_id, destination_uri)
-    )
-
-description = "groundtest"
+description = "groundtest file transfer"
 start_date = datetime.date(2021, 3, 29)
 start_time = datetime.time(hour=20)
 sink_bucket = "azure-proxy"
@@ -89,8 +97,10 @@ with googleapiclient.discovery.build('storagetransfer', 'v1',credentials=credent
             }
         }
     }
-    result = storagetransfer.transferJobs().create(body=transfer_job).execute()
-    print('Returned transferJob: {}'.format(
-        json.dumps(result, indent=4)))
-
-
+    try:
+        result = storagetransfer.transferJobs().create(body=transfer_job).execute()
+        print('Returned transferJob: {}'.format(
+            json.dumps(result, indent=4)))
+    except Exception as e:
+        print("error")
+        print(e)
