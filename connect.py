@@ -4,18 +4,9 @@ import datetime
 import json
 import googleapiclient.discovery
 
+
+# configuration
 key_path = "testground-97-13593ff4ef64.json"
-
-def get_credentials_from_key_file(key_path):
-    credentials = service_account.Credentials.from_service_account_file(
-        key_path, scopes=["https://www.googleapis.com/auth/cloud-platform"],
-    )
-    return credentials
-
-
-credentials = get_credentials_from_key_file(key_path)
-project_id= credentials.project_id
-
 dataset_id = "test"
 table_id = "housing"
 source_bucket = "testground-97"
@@ -33,6 +24,18 @@ sql_query = """
 transfer_description = "groundtest file transfer"
 transfer_start_date = datetime.date(2021, 3, 30)
 transfer_start_time = datetime.time(hour=20)
+
+# initialize
+def get_credentials_from_key_file(key_path):
+    credentials = service_account.Credentials.from_service_account_file(
+        key_path, scopes=["https://www.googleapis.com/auth/cloud-platform"],
+    )
+    return credentials
+
+
+credentials = get_credentials_from_key_file(key_path)
+project_id= credentials.project_id
+
 
 # pipeline step 1
 def step_1_query_and_export():
