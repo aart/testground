@@ -58,10 +58,10 @@ def step_1_query_and_export():
                     "Exported {}:{}.{} to {}".format(project_id, dataset_id, table_id, destination_uri)
                 )
             except Exception as e:
-                print("export error handling TODO")  # TODO
+                print("export error handling")  # TODO
                 print(e)
         except Exception as e:
-            print("query error handling TODO") #TODO
+            print("query error handling") #TODO
             print(e)
 
 
@@ -105,7 +105,7 @@ def step_2_transfer_file():
             print('Returned transferJob: {}'.format(
                 json.dumps(result, indent=4)))
         except Exception as e:
-            print("transfer error handling TODO") #TODO
+            print("transfer error handling") #TODO
             print(e)
 
 step_1_query_and_export()
