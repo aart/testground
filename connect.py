@@ -26,7 +26,9 @@ transfer_description = "groundtest file transfer"
 transfer_start_date = datetime.date(2021, 3, 30)
 transfer_start_time = datetime.time(hour=20)
 
-AZURE_KEY= "ICPShoL/hE89OPxtoYtyK9CMsMOFUcu44Loce8Ei9upHTNwLoTXKXLXju65rKJs2ltsr0m9KdHAsT/k+1IuQ/Q=="
+AZURE_KEY= ""
+azure_storage_account = ""
+azure_container = ""
 
 # initialize
 def initialize_google_account(key_path):
