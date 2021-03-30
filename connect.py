@@ -12,6 +12,7 @@ def get_credentials_from_key_file(key_path):
     )
     return credentials
 
+
 credentials = get_credentials_from_key_file(key_path)
 project_id= credentials.project_id
 
@@ -107,6 +108,7 @@ def step_2_transfer_file():
         except Exception as e:
             print("transfer error handling") #TODO
             print(e)
+
 
 step_1_query_and_export()
 step_2_transfer_file()
