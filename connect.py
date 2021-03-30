@@ -5,7 +5,7 @@ import json
 import googleapiclient.discovery
 
 
-# test configuration
+# test configuration TODO
 key_path = "testground-97-13593ff4ef64.json"
 bigquery_dataset_id = "test"
 bigquery_table_id = "housing"
