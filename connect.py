@@ -11,33 +11,52 @@ credentials = service_account.Credentials.from_service_account_file(
 )
 
 project_id=credentials.project_id
-
-client = bigquery.Client(credentials=credentials, project=project_id,)
-
 dataset_id = "test"
 bucket_name = "testground-97"
 table_id = "housing"
 
-destination_uri = "gs://{}/{}".format(bucket_name, "housing.parquet")
-dataset_ref = bigquery.DatasetReference(project_id, dataset_id)
-table_ref = dataset_ref.table(table_id)
 
-extract_job = client.extract_table(
-    table_ref,
-    destination_uri,
-    # Location must match that of the source table.
-    location="EU",
-)  # API request
-extract_job.result()  # Waits for job to complete.
+with bigquery.Client(credentials=credentials, project=project_id,) as client:
 
-print(
-    "Exported {}:{}.{} to {}".format(project_id, dataset_id, table_id, destination_uri)
-)
+    destination_uri = "gs://{}/{}".format(bucket_name, "housing.parquet")
+    dataset_ref = bigquery.DatasetReference(project_id, dataset_id)
+    table_ref = dataset_ref.table(table_id)
+
+    query_job = client.query(
+        """
+        SELECT
+          CONCAT(
+            'https://stackoverflow.com/questions/',
+            CAST(id as STRING)) as url,
+          view_count
+        FROM `bigquery-public-data.stackoverflow.posts_questions`
+        WHERE tags like '%google-bigquery%'
+        ORDER BY view_count DESC
+        LIMIT 10"""
+    )
+
+    results = query_job.result()
 
 
-def transfer(description, project_id, start_date, start_time, source_bucket, sink_bucket):
-    """Create a one-time transfer from Amazon S3 to Google Cloud Storage."""
-    storagetransfer = googleapiclient.discovery.build('storagetransfer', 'v1',credentials=credentials)
+    extract_job = client.extract_table(
+        table_ref,
+        destination_uri,
+        # Location must match that of the source table.
+        location="EU",
+    )  # API request
+    extract_job.result()  # Waits for job to complete.
+
+    print(
+        "Exported {}:{}.{} to {}".format(project_id, dataset_id, table_id, destination_uri)
+    )
+
+description = "groundtest"
+start_date = datetime.date(2021, 3, 29)
+start_time = datetime.time(hour=20)
+sink_bucket = "azure-proxy"
+source_bucket = bucket_name
+
+with googleapiclient.discovery.build('storagetransfer', 'v1',credentials=credentials) as storagetransfer:
 
     # Edit this template with desired parameters.
     transfer_job = {
@@ -70,17 +89,8 @@ def transfer(description, project_id, start_date, start_time, source_bucket, sin
             }
         }
     }
-
     result = storagetransfer.transferJobs().create(body=transfer_job).execute()
     print('Returned transferJob: {}'.format(
         json.dumps(result, indent=4)))
-
-
-description = "groundtest"
-start_date = datetime.date(2021, 3, 29)
-start_time = datetime.time(hour=20)
-sink_bucket = "azure-proxy"
-
-transfer(description, project_id, start_date, start_time, bucket_name, sink_bucket)
 
 
