@@ -31,8 +31,8 @@ sql_query = """
     ORDER BY view_count DESC
     LIMIT 10"""
 transfer_description = "groundtest file transfer"
-start_date = datetime.date(2021, 3, 30)
-start_time = datetime.time(hour=20)
+transfer_start_date = datetime.date(2021, 3, 30)
+transfer_start_time = datetime.time(hour=20)
 
 # pipeline step 1
 def step_1_query_and_export():
@@ -77,19 +77,19 @@ def step_2_transfer_to_lake():
             'projectId': project_id,
             'schedule': {
                 'scheduleStartDate': {
-                    'day': start_date.day,
-                    'month': start_date.month,
-                    'year': start_date.year
+                    'day': transfer_start_date.day,
+                    'month': transfer_start_date.month,
+                    'year': transfer_start_date.year
                 },
                 'scheduleEndDate': {
-                    'day': start_date.day,
-                    'month': start_date.month,
-                    'year': start_date.year
+                    'day': transfer_start_date.day,
+                    'month': transfer_start_date.month,
+                    'year': transfer_start_date.year
                 },
                 'startTimeOfDay': {
-                    'hours': start_time.hour,
-                    'minutes': start_time.minute,
-                    'seconds': start_time.second
+                    'hours': transfer_start_time.hour,
+                    'minutes': transfer_start_time.minute,
+                    'seconds': transfer_start_time.second
                 }
             },
             'transferSpec': {
