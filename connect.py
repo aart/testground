@@ -37,20 +37,19 @@ start_time = datetime.time(hour=20)
 def step_1():
     with bigquery.Client(credentials=credentials, project=project_id,) as client:
 
-        destination_uri = "gs://{}/{}".format(source_bucket, "housing.parquet")
-        dataset_ref = bigquery.DatasetReference(project_id, dataset_id)
-        table_ref = dataset_ref.table(table_id)
-
-        query_job = client.query( sql_query )
         try: # test query
+            query_job = client.query(sql_query)
             results = query_job.result()
             print("Queried")
         except Exception as e:
             print("query error handling TODO") #TODO
             print(e)
 
-        try: # test export
 
+        try: # test export
+            destination_uri = "gs://{}/{}".format(source_bucket, "housing.parquet")
+            dataset_ref = bigquery.DatasetReference(project_id, dataset_id)
+            table_ref = dataset_ref.table(table_id)
             config = bigquery.job.ExtractJobConfig(destination_format="PARQUET")
             extract_job = client.extract_table(
                 table_ref,
