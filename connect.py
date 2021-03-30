@@ -38,7 +38,9 @@ with bigquery.Client(credentials=credentials, project=project_id,) as client:
     )
     try: # test query
         results = query_job.result()
+        print("Queried")
     except Exception as e:
+        print("error handling TODO") #TODO
         print(e)
 
     try: # test export
@@ -53,6 +55,7 @@ with bigquery.Client(credentials=credentials, project=project_id,) as client:
             "Exported {}:{}.{} to {}".format(project_id, dataset_id, table_id, destination_uri)
         )
     except Exception as e:
+        print("error handling TODO") #TODO
         print(e)
 
 
@@ -102,5 +105,5 @@ with googleapiclient.discovery.build('storagetransfer', 'v1',credentials=credent
         print('Returned transferJob: {}'.format(
             json.dumps(result, indent=4)))
     except Exception as e:
-        print("error")
+        print("error handling TODO") #TODO
         print(e)
