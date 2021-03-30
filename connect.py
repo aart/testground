@@ -7,10 +7,10 @@ import googleapiclient.discovery
 
 # test configuration
 key_path = "testground-97-13593ff4ef64.json"
-dataset_id = "test"
-table_id = "housing"
-source_bucket = "testground-97"
-sink_bucket = "azure-proxy"
+bigquery_dataset_id = "test"
+bigquery_table_id = "housing"
+gcs_origin_bucket = "testground-97"
+lake_destination_bucket = "azure-proxy"
 sql_query = """
     SELECT
       CONCAT(
@@ -46,9 +46,9 @@ def step_1_query_and_export():
             results = query_job.result()
             print("Queried")
             try:  # test export
-                destination_uri = "gs://{}/{}".format(source_bucket, "housing.parquet")
-                dataset_ref = bigquery.DatasetReference(project_id, dataset_id)
-                table_ref = dataset_ref.table(table_id)
+                destination_uri = "gs://{}/{}".format(gcs_origin_bucket, "housing.parquet")
+                dataset_ref = bigquery.DatasetReference(project_id, bigquery_dataset_id)
+                table_ref = dataset_ref.table(bigquery_table_id)
                 config = bigquery.job.ExtractJobConfig(destination_format="PARQUET")
                 extract_job = client.extract_table(
                     table_ref,
@@ -59,7 +59,7 @@ def step_1_query_and_export():
                 )  # API request
                 extract_job.result()  # Waits for job to complete.
                 print(
-                    "Exported {}:{}.{} to {}".format(project_id, dataset_id, table_id, destination_uri)
+                    "Exported {}:{}.{} to {}".format(project_id, bigquery_dataset_id, bigquery_table_id, destination_uri)
                 )
             except Exception as e:
                 print("export error handling")  # TODO
@@ -97,10 +97,10 @@ def step_2_transfer_to_lake():
             },
             'transferSpec': {
                 'gcsDataSource': {
-                    'bucketName': source_bucket
+                    'bucketName': gcs_origin_bucket
                 },
                 'gcsDataSink': {
-                    'bucketName': sink_bucket
+                    'bucketName': lake_destination_bucket
                 }
             }
         }
