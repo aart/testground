@@ -34,7 +34,7 @@ start_date = datetime.date(2021, 3, 30)
 start_time = datetime.time(hour=20)
 
 # pipeline step 1
-def step_1():
+def step_1_query_and_export():
     with bigquery.Client(credentials=credentials, project=project_id,) as client:
 
         try: # test query
@@ -66,7 +66,7 @@ def step_1():
 
 
 # pipeline step 2
-def step_2():
+def step_2_transfer_file():
     with googleapiclient.discovery.build('storagetransfer', 'v1',credentials=credentials) as storagetransfer:
 
         # Edit this template with desired parameters.
@@ -108,4 +108,5 @@ def step_2():
             print("transfer error handling TODO") #TODO
             print(e)
 
-step_1()
+step_1_query_and_export()
+step_2_transfer_file()
