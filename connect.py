@@ -49,20 +49,18 @@ def initialize_azure_account(storage_account_name, storage_account_key):
 
 initialize_azure_account("googledata","ICPShoL/hE89OPxtoYtyK9CMsMOFUcu44Loce8Ei9upHTNwLoTXKXLXju65rKJs2ltsr0m9KdHAsT/k+1IuQ/Q==")
 
-def create_directory():
+def create_azure_directory():
     try:
         global file_system_client
         file_system_client = service_client.create_file_system(file_system="my-file-system")
         try:
             file_system_client.create_directory("my-directory")
-
         except Exception as e:
             print(e)
     except Exception as e:
         print(e)
 
-
-create_directory()
+create_azure_directory()
 
 # pipeline step 1
 def step_1_query_and_export():
