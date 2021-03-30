@@ -3,6 +3,7 @@ from google.oauth2 import service_account
 import datetime
 import json
 import googleapiclient.discovery
+from azure.storage.filedatalake import DataLakeServiceClient
 
 
 # test configuration TODO
@@ -26,15 +27,27 @@ transfer_start_date = datetime.date(2021, 3, 30)
 transfer_start_time = datetime.time(hour=20)
 
 # initialize
-def get_credentials_from_key_file(key_path):
+def initialize_google_account(key_path):
     credentials = service_account.Credentials.from_service_account_file(
         key_path, scopes=["https://www.googleapis.com/auth/cloud-platform"],
     )
     return credentials
 
-
-credentials = get_credentials_from_key_file(key_path)
+credentials = initialize_google_account(key_path)
 project_id= credentials.project_id
+
+def initialize_azure_account(storage_account_name, storage_account_key):
+    try:
+        global service_client
+
+        service_client = DataLakeServiceClient(account_url="{}://{}.dfs.core.windows.net".format(
+            "https", storage_account_name), credential=storage_account_key)
+
+    except Exception as e:
+        print("azure error handling")  # TODO
+        print(e)
+
+initialize_azure_account("googledata","")
 
 
 # pipeline step 1
