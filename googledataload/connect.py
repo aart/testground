@@ -3,11 +3,12 @@ from google.oauth2 import service_account
 import datetime
 import json
 import googleapiclient.discovery
+import unittest
 from azure.storage.filedatalake import DataLakeServiceClient
 
 
 # test configuration TODO
-key_path = "testground-97-13593ff4ef64.json"
+key_path = "./testground-97-13593ff4ef64.json"
 bigquery_dataset_id = "test"
 bigquery_table_id = "housing"
 gcs_origin_bucket = "testground-97"
@@ -26,7 +27,7 @@ transfer_description = "groundtest file transfer"
 transfer_start_date = datetime.date(2021, 3, 30)
 transfer_start_time = datetime.time(hour=20)
 
-AZURE_KEY= ""
+AZURE_KEY= "cLgpT3gjRAXj5fyIHVot23V/+EDj0TIPzDu7Z78pYmpFZGCjfb8sk/xgGnA8hfbv0aEBig0j64J5+TWYfqHohw=="
 azure_storage_account = ""
 azure_container = ""
 
@@ -36,9 +37,6 @@ def initialize_google_account(key_path):
         key_path, scopes=["https://www.googleapis.com/auth/cloud-platform"],
     )
     return credentials
-
-credentials = initialize_google_account(key_path)
-project_id= credentials.project_id
 
 def initialize_azure_account(storage_account_name, storage_account_key):
     try:
@@ -51,9 +49,9 @@ def initialize_azure_account(storage_account_name, storage_account_key):
         print("azure error handling")  # TODO
         print(e)
 
-initialize_azure_account("googledata",AZURE_KEY)
-
 def create_azure_directory():
+    initialize_azure_account("googledata", AZURE_KEY)
+
     try:
         global file_system_client
         file_system_client = service_client.create_file_system(file_system="my-file-system")
@@ -64,10 +62,11 @@ def create_azure_directory():
     except Exception as e:
         print(e)
 
-create_azure_directory()
-
 # pipeline step 1
 def step_1_query_and_export():
+    credentials = initialize_google_account(key_path)
+    project_id = credentials.project_id
+
     with bigquery.Client(credentials=credentials, project=project_id,) as client:
 
         try: # test query
@@ -100,6 +99,8 @@ def step_1_query_and_export():
 
 # pipeline step 2
 def step_2a_transfer_to_lake():
+    credentials = initialize_google_account(key_path)
+    project_id = credentials.project_id
     with googleapiclient.discovery.build('storagetransfer', 'v1',credentials=credentials) as storagetransfer:
 
         # Edit this template with desired parameters.
@@ -143,6 +144,8 @@ def step_2a_transfer_to_lake():
 
 # pipeline step 2
 def step_2b_transfer_to_lake():
+    credentials = initialize_google_account(key_path)
+    project_id = credentials.project_id
     with googleapiclient.discovery.build('storagetransfer', 'v1',credentials=credentials) as storagetransfer:
 
         # Edit this template with desired parameters.
@@ -188,7 +191,3 @@ def step_2b_transfer_to_lake():
             print("transfer error handling") #TODO
             print(e)
 
-
-#step_1_query_and_export()
-#step_2a_transfer_to_lake()
-step_2b_transfer_to_lake()
