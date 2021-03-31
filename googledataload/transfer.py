@@ -3,7 +3,6 @@ from google.oauth2 import service_account
 import datetime
 import json
 import googleapiclient.discovery
-import unittest
 from azure.storage.filedatalake import DataLakeServiceClient
 
 

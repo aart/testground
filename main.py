@@ -1,4 +1,4 @@
-from googledataload import connect
+from googledataload import transfer
 import unittest
 
 class Test(unittest.TestCase):
@@ -6,6 +6,6 @@ class Test(unittest.TestCase):
         self.assertUpper('aart'.upper(), 'AART')
 
 
-#connect.step_1_query_and_export()
-#connect.step_2a_transfer_to_lake()
+#transfer.step_1_query_and_export()
+#transfer.step_2a_transfer_to_lake()
 unittest.main()
