@@ -45,7 +45,7 @@ def step_1_query_and_export():
                     "Exported {}:{}.{} to {}".format(project_id, bigquery_dataset_id, bigquery_table_id, destination_uri)
                 )
             except Exception as e:
-                print("export error handling")  # TODO
+                print('export error handling')  # TODO
                 print(e)
         except Exception as e:
             print("query error handling") #TODO
