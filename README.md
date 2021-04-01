@@ -8,5 +8,5 @@
         - A Storage Account File container
 
 # DESIGN
-    - The solutiond desing is described in the link below:
+    - The solution desing is described in the link below:
         - TODO: INCLUDE LINK
