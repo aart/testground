@@ -38,6 +38,13 @@ def main():
         print('query error')
         print(e)
 
+
+    # configuration TODO
+    bigquery_dataset_id="test"
+    bigquery_table_id="housing"
+    gcs_origin_bucket="testground-97"
+    lake_destination_bucket="azure-proxy"
+
     # export file
     # transfer file
 

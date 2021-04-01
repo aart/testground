@@ -16,15 +16,9 @@ def query( google_credentials ,sql_query):
         except Exception as e:
             return e
 
-def query_and_export(key_path, sql_query):
+def query_and_export(key_path, sql_query, bigquery_table_id,bigquery_dataset_id,gcs_origin_bucket,lake_destination_bucket):
     google_credentials = cloud_connections.initialize_google_account_from_file(key_path)
-    project_id = credentials.project_id
-
-    # configuration TODO
-    bigquery_dataset_id="test"
-    bigquery_table_id="housing"
-    gcs_origin_bucket="testground-97"
-    lake_destination_bucket="azure-proxy"
+    project_id = google_credentials.project_id
 
     with bigquery.Client(credentials= google_credentials, project=project_id,) as client:
 
