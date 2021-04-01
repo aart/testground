@@ -25,13 +25,12 @@ class TestConnect(unittest.TestCase):
         except Exception as e:
             print(e)
 
-
 # initialize
 def load_azure_key_from_file(key_path: str) -> str:
     import json
     with open(key_path) as json_file:
         data=json.load(json_file)
-        return data['container_key']
+        return data['sorage_key']
 
 
 # initialize
@@ -49,8 +48,6 @@ def initialize_azure_account(storage_account_name: str, storage_account_key: str
         service_client=azure.storage.filedatalake.DataLakeServiceClient(
             account_url="{}://{}.dfs.core.windows.net".format(
                 "https", storage_account_name), credential=storage_account_key)
-
-
     except Exception as e:
         print("azure error handling")  # TODO
         return e
