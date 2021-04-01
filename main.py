@@ -1,22 +1,24 @@
 from googledataload import cloud_connections, bigquery_extract, cloud_transfer
 import json
 
+
 # TODO add monitoring
 # TODO add logging
 # TODO add code
 # TODO fully parametrize with config file, ...
 
 def run_pipeline_example():
-    print("starting pipeline to run google bigquery sql, export result table and reliable transfer parquet data file(s) to the azure-based data lake")
+    print(
+        "starting pipeline to run google bigquery sql, export result table and reliable transfer parquet data file(s) to the azure-based data lake")
+    print('step 1 : Query bigquery and store results in table')
+    print('step 2 : Export bigquery table as parquet file(s) in google cloud storage')
+    print('step 3 : Transfer parquet file(s) from google cloud storage to data lake')
 
     # Loading Google Cloud credentials
     google_credentials=cloud_connections.initialize_google_account_from_file("./google_key.json")
-    project_id= google_credentials.project_id
-    print(project_id)
-
+    project_id=google_credentials.project_id
     # Reading azure storage access key
-    storage_key = cloud_connections.load_azure_key_from_file('./azure_key.json')
-    print(storage_key)
+    storage_key=cloud_connections.load_azure_key_from_file('./azure_key.json')
 
     # Connect to Azure storage account
     try:
@@ -36,7 +38,7 @@ def run_pipeline_example():
             WHERE tags like '%google-bigquery%'
             ORDER BY view_count DESC
             LIMIT 10"""
-        results = bigquery_extract.query( google_credentials, sql_query)
+        results=bigquery_extract.query(google_credentials, sql_query)
         print('Queried executed:')
         print(sql_query)
     except Exception as e:
@@ -49,7 +51,7 @@ def run_pipeline_example():
         bigquery_table_id="housing"
         gcs_export_bucket="testground-97"
 
-        bigquery_extract.export( google_credentials, bigquery_dataset_id, bigquery_table_id, gcs_export_bucket)
+        bigquery_extract.export(google_credentials, bigquery_dataset_id, bigquery_table_id, gcs_export_bucket)
         print(
             "Exported {}:{}.{} to {}".format(project_id, bigquery_dataset_id, bigquery_table_id, gcs_export_bucket)
         )
@@ -57,21 +59,21 @@ def run_pipeline_example():
         print('export error:')
         print(e)
 
-
     # Transfer files from google cloud storage bucket to the azure storage account container
-
     try:
         destination_bucket="azure-proxy"
         gcs_origin_bucket="testground-97"
 
-        job = cloud_transfer.transfer_to_lake(google_credentials,gcs_origin_bucket, destination_bucket)
+        job=cloud_transfer.transfer_to_lake(google_credentials, gcs_origin_bucket, destination_bucket)
         print('Returned transferJob: {}'.format(
             json.dumps(job, indent=4)))
     except Exception as e:
         print('transfer error:')
         print(e)
 
+
 def main():
     run_pipeline_example()
+
 
 main()
