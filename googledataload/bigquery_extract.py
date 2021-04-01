@@ -1,7 +1,7 @@
 from google.cloud import bigquery
 from google.oauth2 import service_account
 
-def query( google_credentials :str,sql_query:str) :
+def query( google_credentials :str,sql_query:str) -> None :
     project_id = google_credentials.project_id
     with bigquery.Client(credentials=google_credentials, project=project_id, ) as client:
         try: # test query

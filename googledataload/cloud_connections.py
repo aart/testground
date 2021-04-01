@@ -44,7 +44,7 @@ def initialize_google_account_from_file(key_path: str) -> service_account.Creden
     return credentials
 
 
-def initialize_azure_account(storage_account_name: str, storage_account_key: str):
+def initialize_azure_account(storage_account_name: str, storage_account_key: str) -> azure.storage.filedatalake.DataLakeServiceClient:
     try:
         service_client=azure.storage.filedatalake.DataLakeServiceClient(
             account_url="{}://{}.dfs.core.windows.net".format(
