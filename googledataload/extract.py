@@ -1,7 +1,7 @@
 from google.cloud import bigquery
 
 # configuration TODO
-key_path = "./testground-97-13593ff4ef64.json"
+key_path = "./google_key.json"
 bigquery_dataset_id = "test"
 bigquery_table_id = "housing"
 gcs_origin_bucket = "testground-97"

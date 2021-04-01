@@ -3,13 +3,12 @@ import json
 import googleapiclient.discovery
 
 # configuration TODO
-key_path = "../testground-97-13593ff4ef64.json"
+key_path = "../google_key.json"
 gcs_origin_bucket = "testground-97"
 lake_destination_bucket = "azure-proxy"
 transfer_description = "groundtest file transfer"
 transfer_start_date = datetime.date(2021, 3, 30)
 transfer_start_time = datetime.time(hour=20)
-azure_key = "cLgpT3gjRAXj5fyIHVot23V/+EDj0TIPzDu7Z78pYmpFZGCjfb8sk/xgGnA8hfbv0aEBig0j64J5+TWYfqHohw=="
 azure_storage_account = ""
 azure_container = ""
 

@@ -4,11 +4,20 @@ from azure.storage.filedatalake import DataLakeServiceClient
 
 class TestConnect(unittest.TestCase):
     def test_initialize_google_account(self):
-        key_path = "./testground-97-13593ff4ef64.json"
+        key_path = "../google_key.json"
         credentials = initialize_google_account(key_path)
         project_id = credentials.project_id
         self.assertEqual(project_id, "testground-97", "issue")
+    def test_load_azure_key(self):
+        load_azure_key('../azure_key.json')
 
+
+# initialize
+def load_azure_key(key_path :str) -> str:
+    import json
+    with open(key_path) as json_file:
+        data = json.load(json_file)
+        return data['container_key']
 
 # initialize
 def initialize_google_account(key_path :str) -> service_account.Credentials:
@@ -43,4 +52,5 @@ def create_azure_directory(azure_key :str):
     except Exception as e:
         print(e)
 
-unittest.main()
+if '__name__' == '__main__':
+    unittest.main()
