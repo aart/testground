@@ -1,11 +1,12 @@
 from googledataload import cloud_connections
+from googledataload import bigquery_extract
 
 def main():
     print("starting pipeline to run google bigquery sql, export result table and reliable transfer parquet data file(s) to the azure-based data lake")
 
     # Loading Google Cloud credentials
-    credentials=cloud_connections.initialize_google_account_from_file("./google_key.json")
-    project_id=credentials.project_id
+    google_credentials=cloud_connections.initialize_google_account_from_file("./google_key.json")
+    project_id= google_credentials.project_id
     print(project_id)
 
     # Reading azure storage access key
@@ -18,7 +19,25 @@ def main():
     except Exception as e:
         print(e)
 
-    # run query
+    try:
+        sql_query="""
+            SELECT
+              CONCAT(
+                'https://stackoverflow.com/questions/',
+                CAST(id as STRING)) as url,
+              view_count
+            FROM `bigquery-public-data.stackoverflow.posts_questions`
+            WHERE tags like '%google-bigquery%'
+            ORDER BY view_count DESC
+            LIMIT 10"""
+        key_path="./google_key.json"
+        # TODO assert
+        bigquery_extract.query( google_credentials, sql_query)
+        print('queried')
+    except Exception as e:
+        print('query error')
+        print(e)
+
     # export file
     # transfer file
 
