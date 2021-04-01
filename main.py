@@ -19,6 +19,7 @@ def run_pipeline():
     except Exception as e:
         print(e)
 
+    # Run a query on google bigquery and store the result table
     try:
         sql_query="""
             SELECT
@@ -38,6 +39,7 @@ def run_pipeline():
         print('query error')
         print(e)
 
+    # Export bigquery table to google cloud storage bucket
     try:
         bigquery_dataset_id="test"
         bigquery_table_id="housing"
@@ -51,10 +53,10 @@ def run_pipeline():
         print('query error')
         print(e)
 
+    # TODO
+    # Transfer files from google cloud storage bucket to the azure storage account container
     lake_destination_bucket="azure-proxy"
 
-
-    # transfer file
 
     # TODO monitoring
     # TODO logging
