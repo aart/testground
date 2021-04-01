@@ -1,6 +1,6 @@
 from google.cloud import bigquery
 import unittest
-import cloud_connects
+import cloud_connections
 
 # configuration TODO
 key_path = "./google_key.json"
@@ -26,7 +26,7 @@ class TestModuleFunctions(unittest.TestCase):
 
 
 def query_and_export(sql_query):
-    credentials = cloud_connects.initialize_google_account(key_path)
+    credentials = cloud_connections.initialize_google_account(key_path)
     project_id = credentials.project_id
 
     with bigquery.Client(credentials=credentials, project=project_id,) as client:

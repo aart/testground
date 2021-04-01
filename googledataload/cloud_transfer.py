@@ -1,7 +1,7 @@
 import datetime
 import json
 import googleapiclient.discovery
-import cloud_connects
+import cloud_connections
 
 # configuration TODO
 key_path = "../google_key.json"
@@ -16,7 +16,7 @@ azure_container = ""
 # pipeline step 2
 
 def transfer_to_lake():
-    credentials = cloud_connects.initialize_google_account(key_path)
+    credentials = cloud_connections.initialize_google_account(key_path)
     project_id = credentials.project_id
     with googleapiclient.discovery.build('storagetransfer', 'v1',credentials=credentials) as storagetransfer:
 
