@@ -9,7 +9,7 @@ def query( google_credentials ,sql_query):
             results = query_job.result()
             return results
         except Exception as e:
-            return e
+            raise e
 
 def export_as_parquet(google_credentials ,bigquery_dataset_id, bigquery_table_id, file_name, gcs_export_bucket):
 
@@ -29,4 +29,4 @@ def export_as_parquet(google_credentials ,bigquery_dataset_id, bigquery_table_id
             )  # API request
             extract_job.result()  # Waits for job to complete.
         except Exception as e:
-            return e
+            raise e

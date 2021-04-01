@@ -53,7 +53,7 @@ def initialize_azure_account(storage_account_name: str, storage_account_key: str
         return service_client
     except Exception as e:
         print("azure error handling")  # TODO
-        return e
+        raise e
 
 if '__name__'=='__main__':
     unittest.main()

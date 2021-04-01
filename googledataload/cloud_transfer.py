@@ -55,4 +55,4 @@ def transfer_to_lake(google_credentials,gcs_origin_bucket, destination_bucket):
             return job
 
         except Exception as e:
-            return e
+            raise e
