@@ -14,9 +14,11 @@ def run_pipeline_example():
     print('step 2 : Export bigquery table as parquet file(s) in google cloud storage')
     print('step 3 : Transfer parquet file(s) from google cloud storage to data lake')
     print('--------------------------------------------------------------------------')
+
     # Loading Google Cloud credentials
     google_credentials=cloud_connections.initialize_google_account_from_file("./google_key.json")
     project_id=google_credentials.project_id
+
     # Reading azure storage access key
     storage_key=cloud_connections.load_azure_key_from_file('./azure_key.json')
 
