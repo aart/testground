@@ -1,7 +1,7 @@
 import datetime
-import json
+
 import googleapiclient.discovery
-import cloud_connections
+
 
 # configuration TODO
 key_path = "../google_key.json"
@@ -15,10 +15,9 @@ azure_container = ""
 
 # pipeline step 2
 
-def transfer_to_lake():
-    credentials = cloud_connections.initialize_google_account(key_path)
-    project_id = credentials.project_id
-    with googleapiclient.discovery.build('storagetransfer', 'v1',credentials=credentials) as storagetransfer:
+def transfer_to_lake(google_credentials,gcs_origin_bucket, destination_bucket):
+    project_id = google_credentials.project_id
+    with googleapiclient.discovery.build('storagetransfer', 'v1',credentials=google_credentials) as storagetransfer:
 
         # Edit this template with desired parameters.
         transfer_job = {
@@ -47,15 +46,13 @@ def transfer_to_lake():
                     'bucketName': gcs_origin_bucket
                 },
                 'gcsDataSink': {
-                    'bucketName': lake_destination_bucket
+                    'bucketName': destination_bucket
                 }
             }
         }
         try:
-            result = storagetransfer.transferJobs().create(body=transfer_job).execute()
-            print('Returned transferJob: {}'.format(
-                json.dumps(result, indent=4)))
-        except Exception as e:
-            print("transfer error handling") #TODO
-            print(e)
+            job = storagetransfer.transferJobs().create(body=transfer_job).execute()
+            return job
 
+        except Exception as e:
+            return e

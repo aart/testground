@@ -1,7 +1,12 @@
-from googledataload import cloud_connections, bigquery_extract
+from googledataload import cloud_connections, bigquery_extract, cloud_transfer
+import json
 
+# TODO add monitoring
+# TODO add logging
+# TODO add code
+# TODO fully parametrize with config file, ...
 
-def run_pipeline():
+def run_pipeline_example():
     print("starting pipeline to run google bigquery sql, export result table and reliable transfer parquet data file(s) to the azure-based data lake")
 
     # Loading Google Cloud credentials
@@ -31,12 +36,11 @@ def run_pipeline():
             WHERE tags like '%google-bigquery%'
             ORDER BY view_count DESC
             LIMIT 10"""
-        key_path="./google_key.json"
-        # TODO assert
-        bigquery_extract.query( google_credentials, sql_query)
-        print('queried')
+        results = bigquery_extract.query( google_credentials, sql_query)
+        print('Queried executed:')
+        print(sql_query)
     except Exception as e:
-        print('query error')
+        print('query error;')
         print(e)
 
     # Export bigquery table to google cloud storage bucket
@@ -50,18 +54,24 @@ def run_pipeline():
             "Exported {}:{}.{} to {}".format(project_id, bigquery_dataset_id, bigquery_table_id, gcs_export_bucket)
         )
     except Exception as e:
-        print('query error')
+        print('export error:')
         print(e)
 
-    # TODO
+
     # Transfer files from google cloud storage bucket to the azure storage account container
-    lake_destination_bucket="azure-proxy"
 
+    try:
+        destination_bucket="azure-proxy"
+        gcs_origin_bucket="testground-97"
 
-    # TODO monitoring
-    # TODO logging
+        job = cloud_transfer.transfer_to_lake(google_credentials,gcs_origin_bucket, destination_bucket)
+        print('Returned transferJob: {}'.format(
+            json.dumps(job, indent=4)))
+    except Exception as e:
+        print('transfer error:')
+        print(e)
 
 def main():
-    run_pipeline()
+    run_pipeline_example()
 
 main()
