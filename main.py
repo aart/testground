@@ -70,6 +70,7 @@ def run_pipeline_example():
     try:
         destination_bucket = "azure-proxy"
         gcs_origin_bucket = "testground-97"
+        # TODO parametrize
         transfer_start_date = datetime.date(2021, 3, 30)
         transfer_start_time = datetime.time(hour = 20)
 
