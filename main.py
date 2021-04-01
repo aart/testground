@@ -2,6 +2,7 @@ from googledataload import cloud_connections, bigquery_extract, cloud_transfer
 import json
 
 
+# TODO integrate secrets in an external system: key vault, ....
 # TODO add monitoring
 # TODO add logging
 # TODO add code comments
