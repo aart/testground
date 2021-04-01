@@ -30,7 +30,7 @@ def load_azure_key_from_file(key_path: str) -> str:
     import json
     with open(key_path) as json_file:
         data=json.load(json_file)
-        return data['sorage_key']
+        return data['storage_key']
 
 
 # initialize
