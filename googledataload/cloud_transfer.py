@@ -1,13 +1,15 @@
 import googleapiclient.discovery
 from google.oauth2 import service_account
 
+
 # pipeline step 2
 
 
-# TODO add type annotations
-def transfer_to_lake(google_credentials : service_account.Credentials,gcs_origin_bucket:str, destination_bucket:str,transfer_start_date,transfer_start_time):
+# TODO complete type annotations
+def transfer_to_lake(google_credentials: service_account.Credentials, gcs_origin_bucket: str, destination_bucket: str,
+                     transfer_start_date, transfer_start_time):
     project_id = google_credentials.project_id
-    with googleapiclient.discovery.build('storagetransfer', 'v1',credentials=google_credentials) as storagetransfer:
+    with googleapiclient.discovery.build('storagetransfer', 'v1', credentials = google_credentials) as storageTransfer:
 
         # Edit this template with desired parameters.
         transfer_job = {
@@ -41,7 +43,7 @@ def transfer_to_lake(google_credentials : service_account.Credentials,gcs_origin
             }
         }
         try:
-            job = storagetransfer.transferJobs().create(body=transfer_job).execute()
+            job = storageTransfer.transferJobs().create(body = transfer_job).execute()
             return job
 
         except Exception as e:
