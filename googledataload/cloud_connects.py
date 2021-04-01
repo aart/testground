@@ -13,17 +13,20 @@ class TestModuleFunctions(unittest.TestCase):
     def test_load_azure_key(self):
         load_azure_key_from_file('../azure_key.json')
 
-    def test_create_azure_directory(azure_key: str):
-        initialize_azure_account("googledata", azure_key)
+    def test_create_azure_directory( storage_key: str):
         try:
-            global file_system_client
-            file_system_client=service_client.create_file_system(file_system="my-file-system")
+            service_client=initialize_azure_account("googledata",   storage_key)
             try:
-                file_system_client.create_directory("my-directory")
+                file_system_client=service_client.create_file_system(file_system="my-file-system")
+                try:
+                    file_system_client.create_directory("my-directory")
+                except Exception as e:
+                    print(e)
             except Exception as e:
                 print(e)
         except Exception as e:
             print(e)
+
 
 # initialize
 def load_azure_key_from_file(key_path: str) -> str:
@@ -43,15 +46,14 @@ def initialize_google_account_from_file(key_path: str) -> service_account.Creden
 
 def initialize_azure_account(storage_account_name: str, storage_account_key: str):
     try:
-        global service_client
-
         service_client=azure.storage.filedatalake.DataLakeServiceClient(
             account_url="{}://{}.dfs.core.windows.net".format(
                 "https", storage_account_name), credential=storage_account_key)
+
+        return service_client
     except Exception as e:
         print("azure error handling")  # TODO
         return e
-
 
 if '__name__'=='__main__':
     unittest.main()
