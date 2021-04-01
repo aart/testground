@@ -1,4 +1,4 @@
-# SET-UP REQUIREMENTS
+# REQUIREMENTS
     - A Google Cloud service account key-file providing access to:
         - BigQuery
         - Google Cloud Storage
