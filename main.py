@@ -4,7 +4,7 @@ import json
 
 # TODO add monitoring
 # TODO add logging
-# TODO add code
+# TODO add code comments
 # TODO fully parametrize with config file, ...
 
 def run_pipeline_example():
