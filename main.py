@@ -60,8 +60,9 @@ def run_pipeline_example():
         bigquery_extract.export_as_parquet(google_credentials, bigquery_dataset_id, bigquery_table_id, file_name,
                                            gcs_export_bucket)
         print(
-            "step 2 : table exported {}:{}.{} to {} as parquet file".format(project_id, bigquery_dataset_id, bigquery_table_id,
-                                                            gcs_export_bucket)
+            "step 2 : table exported {}:{}.{} to {} as parquet file".format(project_id, bigquery_dataset_id,
+                                                                            bigquery_table_id,
+                                                                            gcs_export_bucket)
         )
     except Exception as e:
         print('step 2 : export error:')
