@@ -1,5 +1,6 @@
 from googledataload import cloud_connections, bigquery_extract, cloud_transfer
 import json
+import datetime
 
 
 # TODO integrate secrets in an external system: key vault, ....
@@ -67,7 +68,10 @@ def run_pipeline_example():
     try:
         destination_bucket="azure-proxy"
         gcs_origin_bucket="testground-97"
-        job=cloud_transfer.transfer_to_lake(google_credentials, gcs_origin_bucket, destination_bucket)
+        transfer_start_date=datetime.date(2021, 3, 30)
+        transfer_start_time=datetime.time(hour=20)
+
+        job=cloud_transfer.transfer_to_lake(google_credentials, gcs_origin_bucket, destination_bucket, transfer_start_date,transfer_start_time)
         print('step 3 : returned transferJob: {}'.format(
             json.dumps(job, indent=4)))
     except Exception as e:

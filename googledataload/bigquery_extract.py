@@ -1,6 +1,7 @@
 from google.cloud import bigquery
+from google.oauth2 import service_account
 
-def query( google_credentials ,sql_query):
+def query( google_credentials :str,sql_query:str) :
     project_id = google_credentials.project_id
     with bigquery.Client(credentials=google_credentials, project=project_id, ) as client:
         try: # test query
@@ -11,7 +12,7 @@ def query( google_credentials ,sql_query):
         except Exception as e:
             raise e
 
-def export_as_parquet(google_credentials ,bigquery_dataset_id, bigquery_table_id, file_name, gcs_export_bucket):
+def export_as_parquet(google_credentials :service_account.Credentials ,bigquery_dataset_id:str, bigquery_table_id:str, file_name:str, gcs_export_bucket:str) -> None:
 
     project_id = google_credentials.project_id
     with bigquery.Client(credentials= google_credentials, project=project_id, ) as client:
