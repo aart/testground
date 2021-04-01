@@ -3,7 +3,7 @@ import unittest
 import azure.storage.filedatalake
 
 
-class TestCloudConnects(unittest.TestCase):
+class TestModuleFunctions(unittest.TestCase):
     def test_initialize_google_account(self):
         key_path="../google_key.json"
         credentials=initialize_google_account_from_file(key_path)

@@ -1,4 +1,7 @@
-from googledataload import cloud_transfer
+from googledataload import cloud_connects
 
-cloud_transfer.step_1_query_and_export()
-cloud_transfer.step_2a_transfer_to_lake()
+def main():
+    print("starting main")
+    print(cloud_connects.load_azure_key_from_file('./azure_key.json'))
+
+main()
