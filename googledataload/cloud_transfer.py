@@ -5,7 +5,7 @@ from google.oauth2 import service_account
 
 
 # TODO add type annotations
-def transfer_to_lake(google_credentials : service_account.Credentials,gcs_origin_bucket, destination_bucket,transfer_start_date,transfer_start_time):
+def transfer_to_lake(google_credentials : service_account.Credentials,gcs_origin_bucket:str, destination_bucket:str,transfer_start_date,transfer_start_time):
     project_id = google_credentials.project_id
     with googleapiclient.discovery.build('storagetransfer', 'v1',credentials=google_credentials) as storagetransfer:
 
