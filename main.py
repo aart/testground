@@ -1,7 +1,7 @@
-from googledataload import cloud_connections
-from googledataload import bigquery_extract
+from googledataload import cloud_connections, bigquery_extract
 
-def main():
+
+def run_pipeline():
     print("starting pipeline to run google bigquery sql, export result table and reliable transfer parquet data file(s) to the azure-based data lake")
 
     # Loading Google Cloud credentials
@@ -38,17 +38,28 @@ def main():
         print('query error')
         print(e)
 
+    try:
+        bigquery_dataset_id="test"
+        bigquery_table_id="housing"
+        gcs_export_bucket="testground-97"
 
-    # configuration TODO
-    bigquery_dataset_id="test"
-    bigquery_table_id="housing"
-    gcs_origin_bucket="testground-97"
+        bigquery_extract.export( google_credentials, bigquery_dataset_id, bigquery_table_id, gcs_export_bucket)
+        print(
+            "Exported {}:{}.{} to {}".format(project_id, bigquery_dataset_id, bigquery_table_id, gcs_export_bucket)
+        )
+    except Exception as e:
+        print('query error')
+        print(e)
+
     lake_destination_bucket="azure-proxy"
 
-    # export file
+
     # transfer file
 
     # TODO monitoring
     # TODO logging
+
+def main():
+    run_pipeline()
 
 main()
