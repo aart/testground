@@ -1,4 +1,4 @@
-from googledataload import bigquery_extract, cloud_connections, cloud_transfer,config
+from googledataload import bigquery_extract, cloud_connections, lake_transfer,config
 import json
 import datetime
 
@@ -75,8 +75,8 @@ def run_pipeline_example():
         transfer_start_date = datetime.date(2021, 3, 30)
         transfer_start_time = datetime.time(hour = 20)
 
-        job = cloud_transfer.transfer_to_lake(google_credentials, gcs_origin_bucket, destination_bucket,
-                                              transfer_start_date, transfer_start_time)
+        job = lake_transfer.transfer_to_lake(google_credentials, gcs_origin_bucket, destination_bucket,
+                                             transfer_start_date, transfer_start_time)
         print('step 3 : returned transferJob: {}'.format(
             json.dumps(job, indent = 4)))
     except Exception as e:
