@@ -1,7 +1,17 @@
+# TODO
+    - move code to Azure DevOps
+    - prepare pipeline to execute on Airflow
+    - integrate secrets in an external system: key vault, .... now they are read from file
+    - integrate environments aspects UAT, PRD, ...
+    - add monitoring according to standards
+    - add logging according to standards
+    - add more unit tests according to standards
+    - improve code readability with comments
+
 # REQUIREMENTS
     - A Google Cloud service account key-file providing access to:
         - BigQuery
-        - Google Cloud Storage
+        - Google Cloud Storage (GCS)
         - Google Cloud Storage Transfer
 
         A Google Cloud service account key-file is a json file with the following structure

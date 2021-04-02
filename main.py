@@ -3,13 +3,6 @@ import json
 import datetime
 
 
-# TODO integrate secrets in an external system: key vault, ....
-# TODO integrate environments aspects UAT, PRD, ...
-# TODO add monitoring
-# TODO add logging
-# TODO add more unit tests
-# TODO improve code readability with comments
-
 def run_local_pipeline(bigquery_dataset_id, bigquery_table_id, gcs_export_bucket, file_name, gcs_origin_bucket,
                        destination_bucket):
     print("starting pipeline to run google bigquery sql,")
