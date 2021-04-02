@@ -1,13 +1,12 @@
-from googledataload import bigquery_extract, cloud_connections, cloud_transfer
+from googledataload import bigquery_extract, cloud_connections, cloud_transfer,config
 import json
 import datetime
 
-
 # TODO integrate secrets in an external system: key vault, ....
+# TODO integrate environments aspects UAT, PRD, ...
 # TODO add monitoring
 # TODO add logging
 # TODO add code comments
-# TODO fully parametrize with config file, ...
 
 def run_pipeline_example():
     print("starting pipeline to run google bigquery sql,")
@@ -86,7 +85,14 @@ def run_pipeline_example():
 
 
 def main():
-    run_pipeline_example()
+    #run_pipeline_example()
+    cnf = config.load_config()
 
+    bigquery_dataset_id =  cnf['google_cloud']
+    print(bigquery_dataset_id)
+    # bigquery_table_id =  cnf['google_cloud']['bigquery_dataset_id']
+    # gcs_export_bucket =  cnf['google_cloud']['bigquery_dataset_id']
+    # file_name =  cnf['google_cloud']['bigquery_dataset_id']
+    # destination_bucket =  cnf['azure']['azure']
 
 main()
