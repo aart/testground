@@ -1,14 +1,17 @@
-from googledataload import bigquery_extract, cloud_connections, lake_transfer,config
+from googledataload import bigquery_extract, cloud_connections, lake_transfer, config_loader
 import json
 import datetime
+
 
 # TODO integrate secrets in an external system: key vault, ....
 # TODO integrate environments aspects UAT, PRD, ...
 # TODO add monitoring
 # TODO add logging
-# TODO add code comments
+# TODO add more unit tests
+# TODO improve code readability with comments
 
-def run_pipeline_example():
+def run_local_pipeline(bigquery_dataset_id, bigquery_table_id, gcs_export_bucket, file_name, gcs_origin_bucket,
+                       destination_bucket):
     print("starting pipeline to run google bigquery sql,")
     print("export result table and reliable transfer parquet data file(s) to the azure-based data lake")
     print('step 1 : Query bigquery and store results in table')
@@ -51,10 +54,6 @@ def run_pipeline_example():
 
     # Export bigquery table to google cloud storage bucket
     try:
-        bigquery_dataset_id = "test"
-        bigquery_table_id = "housing"
-        gcs_export_bucket = "testground-97"
-        file_name = "housing.parquet"
 
         bigquery_extract.export_as_parquet(google_credentials, bigquery_dataset_id, bigquery_table_id, file_name,
                                            gcs_export_bucket)
@@ -69,8 +68,7 @@ def run_pipeline_example():
 
     # Transfer files from google cloud storage bucket to the azure storage account container
     try:
-        destination_bucket = "azure-proxy"
-        gcs_origin_bucket = "testground-97"
+
         # TODO parametrize
         transfer_start_date = datetime.date(2021, 3, 30)
         transfer_start_time = datetime.time(hour = 20)
@@ -85,14 +83,20 @@ def run_pipeline_example():
 
 
 def main():
-    #run_pipeline_example()
-    cnf = config.load_config()
+    try:
+        cnf = config_loader.load_config('')
+        bigquery_dataset_id = cnf['google_cloud']['bigquery_dataset_id']
+        bigquery_table_id = cnf['google_cloud']['bigquery_table_id']
+        gcs_export_bucket = cnf['google_cloud']['gcs_export_bucket']
+        gcs_origin_bucket = cnf['google_cloud']['gcs_export_bucket']
+        file_name = cnf['google_cloud']['file_name']
+        destination_bucket = cnf['azure']['destination_bucket']
+    except Exception as e:
+        print('step 0 : error with config loading:')
+        print(e)
 
-    bigquery_dataset_id =  cnf['google_cloud']
-    print(bigquery_dataset_id)
-    # bigquery_table_id =  cnf['google_cloud']['bigquery_dataset_id']
-    # gcs_export_bucket =  cnf['google_cloud']['bigquery_dataset_id']
-    # file_name =  cnf['google_cloud']['bigquery_dataset_id']
-    # destination_bucket =  cnf['azure']['azure']
+    run_local_pipeline(bigquery_dataset_id, bigquery_table_id, gcs_export_bucket, file_name, gcs_origin_bucket,
+                       destination_bucket)
+
 
 main()
