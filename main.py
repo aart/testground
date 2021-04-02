@@ -3,7 +3,7 @@ import json
 import datetime
 
 
-def run_local_pipeline(bigquery_dataset_id, bigquery_table_id, gcs_export_bucket, file_name, gcs_origin_bucket,
+def run_local_pipeline(sql_query, bigquery_dataset_id, bigquery_table_id, gcs_export_bucket, file_name, gcs_origin_bucket,
                        destination_bucket):
     print("starting pipeline to run google bigquery sql,")
     print("export result table and reliable transfer parquet data file(s) to the azure-based data lake")
@@ -27,16 +27,6 @@ def run_local_pipeline(bigquery_dataset_id, bigquery_table_id, gcs_export_bucket
 
     # Run a query on google bigquery and store the result table
     try:
-        sql_query = """
-            SELECT
-              CONCAT(
-                'https://stackoverflow.com/questions/',
-                CAST(id as STRING)) as url,
-              view_count
-            FROM `bigquery-public-data.stackoverflow.posts_questions`
-            WHERE tags like '%google-bigquery%'
-            ORDER BY view_count DESC
-            LIMIT 10"""
         results = bigquery_extract.query(google_credentials, sql_query)
         print('step 1 : queried executed:')
         print(sql_query)
@@ -88,7 +78,18 @@ def main():
         print('step 0 : error with config loading:')
         print(e)
 
-    run_local_pipeline(bigquery_dataset_id, bigquery_table_id, gcs_export_bucket, file_name, gcs_origin_bucket,
+    sql_query = """
+            SELECT
+              CONCAT(
+                'https://stackoverflow.com/questions/',
+                CAST(id as STRING)) as url,
+              view_count
+            FROM `bigquery-public-data.stackoverflow.posts_questions`
+            WHERE tags like '%google-bigquery%'
+            ORDER BY view_count DESC
+            LIMIT 10"""
+
+    run_local_pipeline(sql_query, bigquery_dataset_id, bigquery_table_id, gcs_export_bucket, file_name, gcs_origin_bucket,
                        destination_bucket)
 
 
