@@ -54,8 +54,8 @@ def run_local_pipeline(sql_query, bigquery_dataset_id, bigquery_table_id, gcs_ex
     try:
 
         # TODO parametrize
-        transfer_start_date = datetime.date(2021, 3, 30)
-        transfer_start_time = datetime.time(hour = 20)
+        transfer_start_date = datetime.date.today()
+        transfer_start_time = datetime.time(hour = 15)
 
         job = lake_transfer.transfer_to_lake(google_credentials, gcs_origin_bucket, destination_bucket,
                                              transfer_start_date, transfer_start_time)
