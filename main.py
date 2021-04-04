@@ -27,7 +27,9 @@ def run_local_pipeline(sql_query, bigquery_dataset_id, bigquery_table_id, gcs_ex
 
     # Run a query on google bigquery and store the result table
     try:
-        results = bigquery_extract.query(google_credentials, sql_query)
+
+        destination_table_id = 'testground-97.temp.tpm'
+        results = bigquery_extract.query(google_credentials, destination_table_id ,sql_query)
         print('step 1 : queried executed:')
         print(sql_query)
         print(type(results))
