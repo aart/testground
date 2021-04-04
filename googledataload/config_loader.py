@@ -5,7 +5,8 @@ def load_config(config_path: str):
     #TODO externalize into a yaml config file
     yaml_config = """
 google_cloud:
-    bigquery_dataset_id: "test"
+    sql_query: "SELECT * FROM `testground-97.test.housing`"
+    bigquery_dataset_id: "transit"
     bigquery_table_id: "housing"
     gcs_export_bucket: "testground-97"
     file_name: "housing.parquet"

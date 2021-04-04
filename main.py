@@ -28,8 +28,7 @@ def run_local_pipeline(sql_query, bigquery_dataset_id, bigquery_table_id, gcs_ex
     # Run a query on google bigquery and store the result table
     try:
 
-        destination_table_id = 'testground-97.temp.tpm'
-        results = bigquery_extract.query(google_credentials, destination_table_id ,sql_query)
+        results = bigquery_extract.query(google_credentials, bigquery_dataset_id, bigquery_table_id, sql_query)
         print('step 1 : queried executed:')
         print(sql_query)
         print(type(results))
@@ -70,6 +69,7 @@ def run_local_pipeline(sql_query, bigquery_dataset_id, bigquery_table_id, gcs_ex
 def main():
     try:
         cnf = config_loader.load_config('')
+        sql_query = cnf['google_cloud']['sql_query']
         bigquery_dataset_id = cnf['google_cloud']['bigquery_dataset_id']
         bigquery_table_id = cnf['google_cloud']['bigquery_table_id']
         gcs_export_bucket = cnf['google_cloud']['gcs_export_bucket']
@@ -80,16 +80,6 @@ def main():
         print('step 0 : error with config loading:')
         print(e)
 
-    sql_query = """
-            SELECT
-              CONCAT(
-                'https://stackoverflow.com/questions/',
-                CAST(id as STRING)) as url,
-              view_count
-            FROM `bigquery-public-data.stackoverflow.posts_questions`
-            WHERE tags like '%google-bigquery%'
-            ORDER BY view_count DESC
-            LIMIT 10"""
 
     run_local_pipeline(sql_query, bigquery_dataset_id, bigquery_table_id, gcs_export_bucket, file_name, gcs_origin_bucket,
                        azure_destination_bucket )
