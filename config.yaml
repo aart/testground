@@ -1,0 +1,8 @@
+google_cloud:
+    sql_query: "SELECT * FROM `testground-97.test.housing`"
+    bigquery_dataset_id: "transit"
+    bigquery_table_id: "housing"
+    gcs_export_bucket: "testground-97"
+    file_name_prefix: "housing.parquet"
+azure:
+    destination_bucket: "azure-proxy"

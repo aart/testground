@@ -68,7 +68,7 @@ def run_local_pipeline(sql_query, bigquery_dataset_id, bigquery_table_id, gcs_ex
 
 def main():
     try:
-        cnf = config_loader.load_config('')
+        cnf = config_loader.load_config('./config.yaml')
         sql_query = cnf['google_cloud']['sql_query']
         bigquery_dataset_id = cnf['google_cloud']['bigquery_dataset_id']
         bigquery_table_id = cnf['google_cloud']['bigquery_table_id']
