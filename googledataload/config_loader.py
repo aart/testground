@@ -9,7 +9,7 @@ google_cloud:
     bigquery_dataset_id: "transit"
     bigquery_table_id: "housing"
     gcs_export_bucket: "testground-97"
-    file_name: "housing.parquet"
+    file_name_prefix: "housing.parquet"
 azure:
     destination_bucket: "azure-proxy"
 """

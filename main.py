@@ -74,14 +74,14 @@ def main():
         bigquery_table_id = cnf['google_cloud']['bigquery_table_id']
         gcs_export_bucket = cnf['google_cloud']['gcs_export_bucket']
         gcs_origin_bucket = cnf['google_cloud']['gcs_export_bucket']
-        file_name = cnf['google_cloud']['file_name']
+        file_name_prefix = cnf['google_cloud']['file_name_prefix']
         azure_destination_bucket = cnf['azure']['destination_bucket']
     except Exception as e:
         print('step 0 : error with config loading:')
         print(e)
 
 
-    run_local_pipeline(sql_query, bigquery_dataset_id, bigquery_table_id, gcs_export_bucket, file_name, gcs_origin_bucket,
+    run_local_pipeline(sql_query, bigquery_dataset_id, bigquery_table_id, gcs_export_bucket, file_name_prefix, gcs_origin_bucket,
                        azure_destination_bucket )
 
 
